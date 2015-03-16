@@ -1,0 +1,79 @@
+<saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+	ID="_cb7f518664f2199119a3d09c9927de60" IssueInstant="2015-03-16T13:55:52.024Z"
+	Version="2.0">
+	<saml2:Issuer>HC -</saml2:Issuer>
+	<saml2:Subject>
+		<saml2:NameID
+			Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03,
+			OU=Serveis Públics de Certificació CDA-1, O=Consorci Sanitari
+			Integral, C=ES</saml2:NameID>
+	</saml2:Subject>
+	<saml2:AttributeStatement>
+		<saml2:Attribute Name="ResponsibleUser">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">HCC0126WS</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="PersonalUser">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">9999999</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="GivenName">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">A</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="FirstFamilyName">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">B</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="SecondFamilyName">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">C</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="DocumentType">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">01</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="documentNumber">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">12345678A</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="Code">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">9999999</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="Profile">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">MD</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="ProviderOrganization">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">H08858656</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="Entity">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">0126</saml1:AttributeValue>
+		</saml2:Attribute>
+		<saml2:Attribute Name="CodeUP">
+			<saml1:AttributeValue xmlns:saml1="urn:oasis:names:tc:SAML:1.0:assertion"
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:type="xs:string">05994</saml1:AttributeValue>
+		</saml2:Attribute>
+	</saml2:AttributeStatement>
+	<saml2:AuthnStatement AuthnInstant="2015-03-16T13:55:52.071Z">
+		<saml2:AuthnContext>
+			<saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</saml2:AuthnContextClassRef>
+		</saml2:AuthnContext>
+	</saml2:AuthnStatement>
+</saml2:Assertion>
+

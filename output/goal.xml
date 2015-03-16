@@ -1,0 +1,164 @@
+<!-- https://wiki.shibboleth.net/confluence/display/OpenSAML/OSTwoDeveloperManual -->
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:etc="http://salut.gencat.cat/hc3/etccerques">
+	<soapenv:Header>
+		<wsse:Security
+			xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<saml:Assertion ID="_cb7f518664f2199119a3d09c9927de60"
+				IssueInstant="2015-03-16T12:35:26.024Z" Version="2.0"
+				xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+				<saml:Issuer>HCC -</saml:Issuer>
+				<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+					<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+						<ds:CanonicalizationMethod
+							Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" />
+						<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+							xmlns:ds="http://www.w3.org/2000/09/xmldsig#" />
+						<ds:Reference URI="#_cb7f518664f2199119a3d09c9927de60"
+							xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+							<ds:Transforms xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+								<ds:Transform
+									Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"
+									xmlns:ds="http://www.w3.org/2000/09/xmldsig#" />
+								<ds:Transform
+									Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#WithComments"
+									xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+									<ec:InclusiveNamespaces PrefixList="ds saml xs"
+										xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#" />
+								</ds:Transform>
+							</ds:Transforms>
+							<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"
+								xmlns:ds="http://www.w3.org/2000/09/xmldsig#" />
+							<ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">B5i5YVpnrfbFsxlu4BzsGCm7KyY=
+							</ds:DigestValue>
+						</ds:Reference>
+					</ds:SignedInfo>
+					<ds:SignatureValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+						drJsS4Pxfrpw/6EdVhHFJZ6vVGa4NPzNjE7Vkub8jwLG/o+vWa+79PCYFzpbQxWXUKpGNg78omiO
+						BkSChQX9WfTSE4jCrpghVm1SesNrEfTsJzpX3nMGnToCasnC0w8RPahJ3kuoJ5GAq/4dUQv2GnB3
+						HlLLfCJEqiQgo0H1SLZ48KJhpUU8jHzf2CFV6BT3RY5TF8KkSZBA0mxL638KRdvTD0D5kmUzflDo
+						yMXmW8rdwC8RHOqaUaRoyVniRR8+ZSPgBpbKfIvD082FKUNy5EHjHn2Jw4RwLSxVkSwymdmTtEc+
+						7e7WEQLgQ3P1ZNXsbku6bxRm/n6sKUrRssqhGw==
+					</ds:SignatureValue>
+					<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+						<ds:X509Data xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+							<ds:X509Certificate xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+								MIIG+jCCBeKgAwIBAgIQRFDZF4gLLb9UiURyQcWY9zANBgkqhkiG9w0BAQUFADCCATExCzAJBgNV
+								BAYTAkVTMTswOQYDVQQKEzJBZ2VuY2lhIENhdGFsYW5hIGRlIENlcnRpZmljYWNpbyAoTklGIFEt
+								MDgwMTE3Ni1JKTE0MDIGA1UEBxMrUGFzc2F0Z2UgZGUgbGEgQ29uY2VwY2lvIDExIDA4MDA4IEJh
+								cmNlbG9uYTEuMCwGA1UECxMlU2VydmVpcyBQdWJsaWNzIGRlIENlcnRpZmljYWNpbyBFQ1YtMjE3
+								MDUGA1UECxMuVmVnZXUgaHR0cHM6Ly93d3cuY2F0Y2VydC5uZXQvdmVyQ0lDLTIgICAoYykwMzE0
+								MDIGA1UECxMrU2VjcmV0YXJpYSBkJ0FkbWluaXN0cmFjaW8gaSBGdW5jaW8gUHVibGljYTEQMA4G
+								A1UEAxMHRUMtU0FGUDAeFw0xNDEyMTEwNzE0NTBaFw0xODEyMTEwNzE0NTBaMIGnMQswCQYDVQQG
+								EwJFUzEjMCEGA1UEChMaQ29uc29yY2kgU2FuaXRhcmkgSW50ZWdyYWwxLjAsBgNVBAsUJVNlcnZl
+								aXMgUPpibGljcyBkZSBDZXJ0aWZpY2FjafMgQ0RBLTExNTAzBgNVBAsTLFZlZ2V1IGh0dHBzOi8v
+								d3d3LmNhdGNlcnQuY2F0L3ZlckNEQS0xIChjKTAzMQwwCgYDVQQDEwNTQVAwggEiMA0GCSqGSIb3
+								DQEBAQUAA4IBDwAwggEKAoIBAQC4qpmhyYFO3/WNRb2JBfLf76EnBM9M0/7ycfb28Nc9bGR4+/h9
+								P1Dbymzl4gYdXvbL5wVDVdsbNdSS9jUF6OdQhQ6v3YDS/OPqJZSKdEVKCuoPZT9mmlVoDbNe+zCQ
+								svq3Rh7HLwXs4KTXjKg5Y3qQqTv1f4gd3KLau8eSWURQseQIBTMEODq2r1ONUJOIFyC7K/is49nG
+								F458yIB7fnlz//JJmL2SRQlc/OCWbtTmUS2H4qAskgKQV/aUkygvfqBO6DKpmXuwPMV9q9j0NOAd
+								TpSFgdmkUJvCnq6EuxXln5i2XR98RMJBrx5Yv8ysq1yTvE4PD1ydZg9vawXUBkK3AgMBAAGjggKT
+								MIICjzAeBgNVHRIEFzAVgRNlY19zYWZwQGNhdGNlcnQubmV0MEQGA1UdEQQ9MDuBIWxsdWlzLnRl
+								aXhlbGxAc2FuaXRhdGludGVncmFsLm9yZ6QWMBQxEjAQBgNVBAUTCVE1ODU2MjU0RzAOBgNVHQ8B
+								Af8EBAMCBLAwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBEGCWCGSAGG+EIBAQQEAwIF
+								oDAdBgNVHQ4EFgQUQNml24+PfmI46NWo8ssagsSPdnMwHwYDVR0jBBgwFoAUBbftTxZS3frmksCi
+								cnlWYFTCJBMwgcwGA1UdIASBxDCBwTCBvgYLKwYBBAH1eAEDAVswga4wLAYIKwYBBQUHAgEWIGh0
+								dHBzOi8vd3d3LmNhdGNlcnQuY2F0L3ZlckNEQS0xMH4GCCsGAQUFBwICMHIacEFxdWVzdCDpcyB1
+								biBjZXJ0aWZpY2F0IGRlIGRpc3Bvc2l0aXUgZCdhcGxpY2FjafMgYXNzZWd1cmFkYSBkZSBjbGFz
+								c2UgMS4gVmVnZXUgaHR0cHM6Ly93d3cuY2F0Y2VydC5jYXQvdmVyQ0RBLTEwcAYIKwYBBQUHAQEE
+								ZDBiMCMGCCsGAQUFBzABhhdodHRwOi8vb2NzcC5jYXRjZXJ0LmNhdDA7BggrBgEFBQcwAoYvaHR0
+								cDovL3d3dy5jYXRjZXJ0LmNhdC9kZXNjYXJyZWdhL3NhZnNfY3Nycy5jcnQwZAYDVR0fBF0wWzBZ
+								oFegVYYoaHR0cDovL2Vwc2NkLmNhdGNlcnQubmV0L2NybC9lYy1zYWZwLmNybIYpaHR0cDovL2Vw
+								c2NkMi5jYXRjZXJ0Lm5ldC9jcmwvZWMtc2FmcC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAGYVATvq
+								+x14uZEJfFT9fmOwTbVBSa4tPjvgWl3d2dVwzVDjOxhiBlEz1n/MLieo2UnLKQ9uA+in9KCaCadl
+								yjnbMjSGl6FfWRiWBP07BXhKrgi5WFKpNJW3pilwrl0sC/LpMHpL3cEQ1qg8HeKeXOh18cFOkE2w
+								nMQeNSqEPQtYHwG9zk/YZYYlFUG5yeFB74YjU0JRHr4Sixn0CK1XvLx47sKaiodOK0rvfQtdjWxA
+								kN0FFr/X84dIvmyLgGORYqKwjt4HoHbaI9YwcHhjNZACHQzDpHYCNTlZXvR9565XfGAswUpLQmn8
+								Fnur+Snf2KTlWFD6ZLiGl3bkLrNwp98=
+							</ds:X509Certificate>
+						</ds:X509Data>
+					</ds:KeyInfo>
+				</ds:Signature>
+				<saml:Subject>
+					<saml:NameID>CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1
+						(c)03, OU=Serveis Públics de Certificació CDA-1, O=Consorci
+						Sanitari Integral, C=ES</saml:NameID>
+				</saml:Subject>
+				<saml:Conditions NotBefore="2015-03-16T12:32:26.024Z"
+					NotOnOrAfter="2015-03-16T12:41:06.024Z" />
+				<saml:AttributeStatement>
+					<saml:Attribute Name="ResponsibleUser">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">HCC0126WS
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="PersonalUser">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">9999999
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="GivenName">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">A
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="FirstFamilyName">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">B
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="SecondFamilyName">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">C
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="DocumentType">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">01
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="documentNumber">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">12345678A
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="Code">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">9999999
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="Profile">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">MD
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="ProviderOrganization">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">H08858656
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="Entity">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">0126
+						</saml:AttributeValue>
+					</saml:Attribute>
+					<saml:Attribute Name="CodeUP">
+						<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">05994
+						</saml:AttributeValue>
+					</saml:Attribute>
+				</saml:AttributeStatement>
+			</saml:Assertion>
+		</wsse:Security>
+	</soapenv:Header>
+	<soapenv:Body>
+		<etc:cercarDocPacient>
+			<etc:cercarDocPacientBean>
+				<idMissatge>00000000000000002177</idMissatge>
+				<cip>MOVI0910420002</cip>
+				<cpc>50116049732902150688310911457711620096</cpc>
+			</etc:cercarDocPacientBean>
+		</etc:cercarDocPacient>
+	</soapenv:Body>
+</soapenv:Envelope>
