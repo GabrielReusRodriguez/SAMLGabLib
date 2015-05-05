@@ -1,5 +1,8 @@
 package samlGabLib.test;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import javax.xml.transform.OutputKeys;
@@ -12,6 +15,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
@@ -48,8 +54,6 @@ import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.signature.impl.SignatureImpl;
 import org.w3c.dom.Element;
-
-
 
 public class Test {
 
@@ -103,45 +107,65 @@ public class Test {
 
 			AttributeStatementBuilder attstmtb = new AttributeStatementBuilder();
 			AttributeStatement attstmt = attstmtb.buildObject();
-			
-			assertion.getAttributeStatements().add(newAttribute("ResponsibleUser","HCC0126WS",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("PersonalUser","9999999",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("GivenName","A",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("FirstFamilyName","B",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("SecondFamilyName","C",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("DocumentType","01",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("documentNumber","12345678A",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("Code","9999999",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("Profile","MD",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("ProviderOrganization","H08858656",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("Entity","0126",attstmt));
-			assertion.getAttributeStatements().add(newAttribute("CodeUP","05994",attstmt));
-			
-			//Signature
-			
+
+			assertion.getAttributeStatements().add(
+					newAttribute("ResponsibleUser", "HCC0126WS", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("PersonalUser", "9999999", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("GivenName", "A", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("FirstFamilyName", "B", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("SecondFamilyName", "C", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("DocumentType", "01", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("documentNumber", "12345678A", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("Code", "9999999", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("Profile", "MD", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("ProviderOrganization", "H08858656", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("Entity", "0126", attstmt));
+			assertion.getAttributeStatements().add(
+					newAttribute("CodeUP", "05994", attstmt));
+
+			// Signature
+
 			SignatureBuilder signb = new SignatureBuilder();
 			SignatureImpl signature = signb.buildObject();
-			//signature.setCanonicalizationAlgorithm("http://www.w3.org/2001/10/xml-exc-c14n#");
-			signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_DIGEST_SHA1);
-			//XMLSignature xmlSignature = new XMLSignature(elementSignature, "http://www.example.org");
-			XMLSignature xmlSignature = null;
+			// signature.setCanonicalizationAlgorithm("http://www.w3.org/2001/10/xml-exc-c14n#");
+			signature
+					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_DIGEST_SHA1);
+			// XMLSignature xmlSignature = new XMLSignature(elementSignature,
+			// "http://www.example.org");
+			
+			String xml = "<Gabriel>yes</Gabriel>";
+			InputStream xmlInputStream = xmlString2InputStream(xml);
+			Document document = getXMLDocument(xmlInputStream);
+			
+			
+			XMLSignature xmlSignature = new ;
+			// xmlSignature.s
 			signature.setXMLSignature(xmlSignature);
-			
+
 			assertion.setSignature(signature);
-			
-			
+
 			// user authenticated via X509 token
-            AuthnStatementBuilder asb = new AuthnStatementBuilder();
-            AuthnStatement myAuthnStatement = asb.buildObject();
-            myAuthnStatement.setAuthnInstant(new DateTime());
-            AuthnContextBuilder acb = new AuthnContextBuilder();
-            AuthnContext myACI = acb.buildObject();
-            AuthnContextClassRefBuilder accrb = new AuthnContextClassRefBuilder();
-            AuthnContextClassRef accr = accrb.buildObject();
-            accr.setAuthnContextClassRef(AuthnContext.X509_AUTHN_CTX);
-            myACI.setAuthnContextClassRef(accr);
-            myAuthnStatement.setAuthnContext(myACI);
-            assertion.getAuthnStatements().add(myAuthnStatement);
+			AuthnStatementBuilder asb = new AuthnStatementBuilder();
+			AuthnStatement myAuthnStatement = asb.buildObject();
+			myAuthnStatement.setAuthnInstant(new DateTime());
+			AuthnContextBuilder acb = new AuthnContextBuilder();
+			AuthnContext myACI = acb.buildObject();
+			AuthnContextClassRefBuilder accrb = new AuthnContextClassRefBuilder();
+			AuthnContextClassRef accr = accrb.buildObject();
+			accr.setAuthnContextClassRef(AuthnContext.X509_AUTHN_CTX);
+			myACI.setAuthnContextClassRef(accr);
+			myAuthnStatement.setAuthnContext(myACI);
+			assertion.getAuthnStatements().add(myAuthnStatement);
 
 			/*
 			 * // user has math degree AttributeStatementBuilder attstmtb = new
@@ -210,7 +234,7 @@ public class Test {
 	}
 
 	private static AttributeStatement newAttribute(String name, String value,
-			AttributeStatement attstmt ) {
+			AttributeStatement attstmt) {
 		AttributeBuilder attbldr = new AttributeBuilder();
 		Attribute attr = attbldr.buildObject();
 		attr.setName(name);
@@ -223,6 +247,28 @@ public class Test {
 		attstmt.getAttributes().add(attr);
 		return attstmt;
 
+	}
+
+	private static InputStream xmlString2InputStream(String xml){
+		
+		InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
+		return inputStream;
+		
+	}
+	
+	private static Document getXMLDocument(InputStream is) {
+
+		Document doc = new Document();
+		SAXBuilder builder = new SAXBuilder();
+
+		try {
+			doc = builder.build(is);
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return doc;
 	}
 
 }
