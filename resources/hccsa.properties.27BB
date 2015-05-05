@@ -1,0 +1,27 @@
+[SAML]
+emissorSAML=HCC -
+rutaNavegador=/var/aplicacions/SAML_HC3/Des/Recursos/iexplore.exe
+rutaPaginesHTML=/var/aplicacions/SAML_HC3/Des/tmp
+URLPostVisor=https://hccc.salut.gencat.cat/ca/group/visor-professional/r
+_continue_=esum-hc
+;# Tiempo de validez en segundos
+TempsValidesaSAML=340
+codiMENhccsa=00
+;# si/no
+esborrarHistoricHtml=si
+
+[CIFRADO]
+rutaMagatzem=/var/aplicacions/SAML_HC3/Des/Recursos/27BB3BA11A00604051F7
+_continue_=761EC455AFA5.p12
+;# El numero de serie sin :
+numeroSerieCert=27BB3BA11A00604051F7761EC455AFA5
+passwordMagatzem={ORlsIxIUeR4cXLS+HnUlyA==}
+
+[LOG]
+;# 0 - SIN LOG
+;# 1 - ERROR
+;# 2 - INF
+;# 3 - DEBUG
+nivellLog=3
+rutaLog=/var/aplicacions/SAML_HC3/Des/Recursos/hccsa.log
+

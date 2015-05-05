@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
+import javax.xml.crypto.dsig.CanonicalizationMethod;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -14,10 +18,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
@@ -53,7 +55,11 @@ import org.opensaml.xml.schema.impl.XSStringBuilder;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.signature.impl.SignatureImpl;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xml.internal.security.algorithms.SignatureAlgorithm;
 
 public class Test {
 
@@ -139,19 +145,64 @@ public class Test {
 			SignatureImpl signature = signb.buildObject();
 			// signature.setCanonicalizationAlgorithm("http://www.w3.org/2001/10/xml-exc-c14n#");
 			signature
-					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_DIGEST_SHA1);
+					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
 			// XMLSignature xmlSignature = new XMLSignature(elementSignature,
 			// "http://www.example.org");
 			
-			String xml = "<Gabriel>yes</Gabriel>";
-			InputStream xmlInputStream = xmlString2InputStream(xml);
-			Document document = getXMLDocument(xmlInputStream);
+			String xml = "<?xml version='1.0' encoding='UTF-8'?><Gabriel>yes</Gabriel>";
+//			InputStream xmlInputStream = xmlString2InputStream(xml);
+//			Document document = getXMLDocument(xmlInputStream);
+			Document document = null;
+			try {
+				document = loadXMLFrom(xml);
+			} catch (SAXException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			String baseURI ="http://csi.org";
+			SignatureAlgorithm.registerDefaultAlgorithms();
+			
+			/*
+			try {
+				//SignatureAlgorithm.register(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1, "org.apache.xml.security.algorithms.implementations.SignatureBaseRSA.SignatureRSASHA1");
+				//SignatureAlgorithm.register(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1, SignatureRSASHA1.class);
+				//SignatureRSASHA1 sigAlg = new SignatureRSASHA1();
+				//SignatureAlgorithm.register(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1, sigAlg);
+				
+				
+			} catch (AlgorithmAlreadyRegisteredException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (XMLSignatureException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}*/
 			
 			
-			XMLSignature xmlSignature = new ;
-			// xmlSignature.s
+			XMLSignature xmlSignature =null;
+			try {
+				xmlSignature = new XMLSignature(
+						document, 
+						baseURI, 
+						//"http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+						SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1
+						);
+				
+			} catch (XMLSecurityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+						
+			//signature.setDOM(document.getDocumentElement());
+			signature.setCanonicalizationAlgorithm(CanonicalizationMethod.EXCLUSIVE);
 			signature.setXMLSignature(xmlSignature);
-
 			assertion.setSignature(signature);
 
 			// user authenticated via X509 token
@@ -251,24 +302,65 @@ public class Test {
 
 	private static InputStream xmlString2InputStream(String xml){
 		
-		InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
+		InputStream inputStream=null;
+
+			inputStream = new ByteArrayInputStream(xml.getBytes());
+
 		return inputStream;
 		
 	}
 	
 	private static Document getXMLDocument(InputStream is) {
-
-		Document doc = new Document();
-		SAXBuilder builder = new SAXBuilder();
-
+		Document doc = null;
+		
 		try {
-			doc = builder.build(is);
-		} catch (JDOMException e) {
+			doc = loadXMLFrom(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return doc;
 	}
+	
+	//@SuppressWarning("unused")
+	private static org.w3c.dom.Document loadXMLFrom(String xml)
+		    throws org.xml.sax.SAXException, java.io.IOException {
+		
+		
+		//    return loadXMLFrom(new java.io.ByteArrayInputStream(xml.getBytes()));
+		
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+	    factory.setNamespaceAware(true);
+	    DocumentBuilder builder = null;
+		try {
+			builder = factory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    return builder.parse(new ByteArrayInputStream(xml.getBytes()));
+		}
+
+	private static org.w3c.dom.Document loadXMLFrom(java.io.InputStream is) 
+		    throws org.xml.sax.SAXException, java.io.IOException {
+		    javax.xml.parsers.DocumentBuilderFactory factory =
+		        javax.xml.parsers.DocumentBuilderFactory.newInstance();
+		    factory.setNamespaceAware(true);
+		    javax.xml.parsers.DocumentBuilder builder = null;
+		    try {
+		        builder = factory.newDocumentBuilder();
+		    }
+		    catch (javax.xml.parsers.ParserConfigurationException ex) {
+		    }  
+		    org.w3c.dom.Document doc = builder.parse(is);
+		    is.close();
+		    return doc;
+		}
 
 }
