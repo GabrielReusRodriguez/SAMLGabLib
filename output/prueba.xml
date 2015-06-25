@@ -1,6 +1,6 @@
 <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" ID="_cb7f518664f2199119a3d09c9927de60"
-	IssueInstant="2015-06-25T07:28:52.877Z" Version="2.0">
+	IssueInstant="2015-06-25T11:39:12.131Z" Version="2.0">
 	<saml2:Issuer>HC -</saml2:Issuer>
 	<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 		<ds:SignedInfo>
@@ -16,19 +16,57 @@
 					</ds:Transform>
 				</ds:Transforms>
 				<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<ds:DigestValue>u3eZiPtTZrif9KOCVbcsezNJjbI=</ds:DigestValue>
+				<ds:DigestValue>Yu8fl8YwJtrCpbr/gyypf5iIQ7g=</ds:DigestValue>
 			</ds:Reference>
 		</ds:SignedInfo>
-		<ds:SignatureValue>AY7fBQ/b8BhDsAJPU1pbjGRx7E7eYStXnjboF3VP85LfSFY9YLK1dWFQmHuKb9YoEtGvNhayokrExDwC9ZDfSVaeaywqpa9T44sc8/ia2VwMs+82MV1nbicj8VrQt7S9ewfTt1B5Tcak2cICgfq4ChQh9WkraeAJTwKkTQebnWko02tV0nSzBuiRhz+AJBEfydk509nj6qLR4Hx3NZCWD4L04+IENLFBRAdpV+1KjwKcCrKruh21bVT5tvyQhnx5BYp0ZmmcVqZ44753CiOEaf/RxajCAgvKRs3wu/eEPmireewXo3NtxgE0l1W5xfWb48v9SJ1v67G04EejWR2NJA==
+		<ds:SignatureValue>XfrxBrOcaZdJePQIxTwRirVcxQ39R3LYbxJp/m75WJevltBQd7/2zYCz7809NjADhfJLBYpibj12uuXVj9pQeeH4sUqkqo095k1mskKtJzyBHcaaU5XBbmLylK5m8tuA1bJqzh4VzE54juRnLRYsc7RmZrQrCzclT8LKnSnP2KJXLcJYmR9IlRVJyAdCr23fLff5aXFHI97cGkXKuPkMK+aCm3WQybzNldnPxj4iNK+lRiHiIk/D3iJt6kjx3ZsNnEfHtUorTDWrPseJWjbs7W6SEW2jcOD8x/MjeHJKEivYq++PSDefMr+iECtF9tPe4LDcLiwXcwa81zXTwV6SVQ==
 		</ds:SignatureValue>
+		<ds:KeyInfo>
+			<ds:X509Data>
+				<ds:X509Certificate>MIIG+jCCBeKgAwIBAgIQRFDZF4gLLb9UiURyQcWY9zANBgkqhkiG9w0BAQUFADCCATExCzAJBgNV
+					BAYTAkVTMTswOQYDVQQKEzJBZ2VuY2lhIENhdGFsYW5hIGRlIENlcnRpZmljYWNpbyAoTklGIFEt
+					MDgwMTE3Ni1JKTE0MDIGA1UEBxMrUGFzc2F0Z2UgZGUgbGEgQ29uY2VwY2lvIDExIDA4MDA4IEJh
+					cmNlbG9uYTEuMCwGA1UECxMlU2VydmVpcyBQdWJsaWNzIGRlIENlcnRpZmljYWNpbyBFQ1YtMjE3
+					MDUGA1UECxMuVmVnZXUgaHR0cHM6Ly93d3cuY2F0Y2VydC5uZXQvdmVyQ0lDLTIgICAoYykwMzE0
+					MDIGA1UECxMrU2VjcmV0YXJpYSBkJ0FkbWluaXN0cmFjaW8gaSBGdW5jaW8gUHVibGljYTEQMA4G
+					A1UEAxMHRUMtU0FGUDAeFw0xNDEyMTEwNzE0NTBaFw0xODEyMTEwNzE0NTBaMIGnMQswCQYDVQQG
+					EwJFUzEjMCEGA1UEChMaQ29uc29yY2kgU2FuaXRhcmkgSW50ZWdyYWwxLjAsBgNVBAsUJVNlcnZl
+					aXMgUPpibGljcyBkZSBDZXJ0aWZpY2FjafMgQ0RBLTExNTAzBgNVBAsTLFZlZ2V1IGh0dHBzOi8v
+					d3d3LmNhdGNlcnQuY2F0L3ZlckNEQS0xIChjKTAzMQwwCgYDVQQDEwNTQVAwggEiMA0GCSqGSIb3
+					DQEBAQUAA4IBDwAwggEKAoIBAQC4qpmhyYFO3/WNRb2JBfLf76EnBM9M0/7ycfb28Nc9bGR4+/h9
+					P1Dbymzl4gYdXvbL5wVDVdsbNdSS9jUF6OdQhQ6v3YDS/OPqJZSKdEVKCuoPZT9mmlVoDbNe+zCQ
+					svq3Rh7HLwXs4KTXjKg5Y3qQqTv1f4gd3KLau8eSWURQseQIBTMEODq2r1ONUJOIFyC7K/is49nG
+					F458yIB7fnlz//JJmL2SRQlc/OCWbtTmUS2H4qAskgKQV/aUkygvfqBO6DKpmXuwPMV9q9j0NOAd
+					TpSFgdmkUJvCnq6EuxXln5i2XR98RMJBrx5Yv8ysq1yTvE4PD1ydZg9vawXUBkK3AgMBAAGjggKT
+					MIICjzAeBgNVHRIEFzAVgRNlY19zYWZwQGNhdGNlcnQubmV0MEQGA1UdEQQ9MDuBIWxsdWlzLnRl
+					aXhlbGxAc2FuaXRhdGludGVncmFsLm9yZ6QWMBQxEjAQBgNVBAUTCVE1ODU2MjU0RzAOBgNVHQ8B
+					Af8EBAMCBLAwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBEGCWCGSAGG+EIBAQQEAwIF
+					oDAdBgNVHQ4EFgQUQNml24+PfmI46NWo8ssagsSPdnMwHwYDVR0jBBgwFoAUBbftTxZS3frmksCi
+					cnlWYFTCJBMwgcwGA1UdIASBxDCBwTCBvgYLKwYBBAH1eAEDAVswga4wLAYIKwYBBQUHAgEWIGh0
+					dHBzOi8vd3d3LmNhdGNlcnQuY2F0L3ZlckNEQS0xMH4GCCsGAQUFBwICMHIacEFxdWVzdCDpcyB1
+					biBjZXJ0aWZpY2F0IGRlIGRpc3Bvc2l0aXUgZCdhcGxpY2FjafMgYXNzZWd1cmFkYSBkZSBjbGFz
+					c2UgMS4gVmVnZXUgaHR0cHM6Ly93d3cuY2F0Y2VydC5jYXQvdmVyQ0RBLTEwcAYIKwYBBQUHAQEE
+					ZDBiMCMGCCsGAQUFBzABhhdodHRwOi8vb2NzcC5jYXRjZXJ0LmNhdDA7BggrBgEFBQcwAoYvaHR0
+					cDovL3d3dy5jYXRjZXJ0LmNhdC9kZXNjYXJyZWdhL3NhZnNfY3Nycy5jcnQwZAYDVR0fBF0wWzBZ
+					oFegVYYoaHR0cDovL2Vwc2NkLmNhdGNlcnQubmV0L2NybC9lYy1zYWZwLmNybIYpaHR0cDovL2Vw
+					c2NkMi5jYXRjZXJ0Lm5ldC9jcmwvZWMtc2FmcC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAGYVATvq
+					+x14uZEJfFT9fmOwTbVBSa4tPjvgWl3d2dVwzVDjOxhiBlEz1n/MLieo2UnLKQ9uA+in9KCaCadl
+					yjnbMjSGl6FfWRiWBP07BXhKrgi5WFKpNJW3pilwrl0sC/LpMHpL3cEQ1qg8HeKeXOh18cFOkE2w
+					nMQeNSqEPQtYHwG9zk/YZYYlFUG5yeFB74YjU0JRHr4Sixn0CK1XvLx47sKaiodOK0rvfQtdjWxA
+					kN0FFr/X84dIvmyLgGORYqKwjt4HoHbaI9YwcHhjNZACHQzDpHYCNTlZXvR9565XfGAswUpLQmn8
+					Fnur+Snf2KTlWFD6ZLiGl3bkLrNwp98=
+				</ds:X509Certificate>
+			</ds:X509Data>
+		</ds:KeyInfo>
 	</ds:Signature>
 	<saml2:Subject>
 		<saml2:NameID
 			Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03,
 			OU=Serveis Públics de Certificació CDA-1, O=Consorci Sanitari
-			Integral, C=ES
-		</saml2:NameID>
+			Integral, C=ES</saml2:NameID>
 	</saml2:Subject>
+	<saml2:Conditions NotBefore="2015-06-25T11:39:12.181Z"
+		NotOnOrAfter="2015-06-25T11:49:12.181Z" />
 	<saml2:AttributeStatement>
 		<saml2:Attribute Name="ResponsibleUser">
 			<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -79,11 +117,4 @@
 				xsi:type="xs:string">05994</saml2:AttributeValue>
 		</saml2:Attribute>
 	</saml2:AttributeStatement>
-	<saml2:AuthnStatement AuthnInstant="2015-06-25T07:28:52.927Z">
-		<saml2:AuthnContext>
-			<saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509
-			</saml2:AuthnContextClassRef>
-		</saml2:AuthnContext>
-	</saml2:AuthnStatement>
 </saml2:Assertion>
-

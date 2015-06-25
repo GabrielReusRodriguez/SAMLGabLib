@@ -12,6 +12,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,9 +36,6 @@ import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
 import org.opensaml.saml2.core.AttributeStatement;
 import org.opensaml.saml2.core.AttributeValue;
-import org.opensaml.saml2.core.AuthnContext;
-import org.opensaml.saml2.core.AuthnContextClassRef;
-import org.opensaml.saml2.core.AuthnStatement;
 import org.opensaml.saml2.core.Conditions;
 import org.opensaml.saml2.core.Issuer;
 import org.opensaml.saml2.core.NameID;
@@ -45,14 +43,12 @@ import org.opensaml.saml2.core.Subject;
 import org.opensaml.saml2.core.impl.AssertionBuilder;
 import org.opensaml.saml2.core.impl.AttributeBuilder;
 import org.opensaml.saml2.core.impl.AttributeStatementBuilder;
-import org.opensaml.saml2.core.impl.AuthnContextBuilder;
-import org.opensaml.saml2.core.impl.AuthnContextClassRefBuilder;
-import org.opensaml.saml2.core.impl.AuthnStatementBuilder;
 import org.opensaml.saml2.core.impl.ConditionsBuilder;
 import org.opensaml.saml2.core.impl.IssuerBuilder;
 import org.opensaml.saml2.core.impl.NameIDBuilder;
 import org.opensaml.saml2.core.impl.SubjectBuilder;
 import org.opensaml.xml.ConfigurationException;
+import org.opensaml.xml.Namespace;
 import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallerFactory;
 import org.opensaml.xml.io.MarshallingException;
@@ -65,6 +61,7 @@ import org.opensaml.xml.security.keyinfo.KeyInfoGeneratorFactory;
 import org.opensaml.xml.security.keyinfo.KeyInfoGeneratorManager;
 import org.opensaml.xml.security.keyinfo.NamedKeyInfoGeneratorManager;
 import org.opensaml.xml.security.x509.BasicX509Credential;
+import org.opensaml.xml.signature.ContentReference;
 import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureConstants;
@@ -120,11 +117,22 @@ public class Test {
 
 		ConditionsBuilder cb = new ConditionsBuilder();
 		Conditions myConditions = cb.buildObject();
-		// myConditions.setNotBefore("2015-03-16T12:32:26.024Z");
-
+		//Creo la date con la condicion.
+		DateTime dtToday = null;
+		dtToday = new DateTime();
+		
+		DateTime dtNotAfter = null;
+		dtNotAfter = new DateTime();
+		dtNotAfter = dtToday.plusMinutes(10);
+		
+		//myConditions.setNotBefore("2015-03-16T12:32:26.024Z");
+		myConditions.setNotBefore(dtToday);
+		myConditions.setNotOnOrAfter(dtNotAfter);
+		
+		assertion.setConditions(myConditions);
 		// myConditions.setNotOnOrAfter("2015-03-16T12:41:06.024Z");
-		myConditions.setNotBefore(new DateTime());
-		myConditions.setNotOnOrAfter(new DateTime());
+		//myConditions.setNotBefore(new DateTime());
+		//myConditions.setNotOnOrAfter(new DateTime());
 
 		AttributeStatementBuilder attstmtb = new AttributeStatementBuilder();
 		AttributeStatement attstmt = attstmtb.buildObject();
@@ -155,6 +163,7 @@ public class Test {
 				newAttribute("CodeUP", "05994", attstmt));
 
 		// user authenticated via X509 token
+		/*
 		AuthnStatementBuilder asb = new AuthnStatementBuilder();
 		AuthnStatement myAuthnStatement = asb.buildObject();
 		myAuthnStatement.setAuthnInstant(new DateTime());
@@ -166,6 +175,7 @@ public class Test {
 		myACI.setAuthnContextClassRef(accr);
 		myAuthnStatement.setAuthnContext(myACI);
 		assertion.getAuthnStatements().add(myAuthnStatement);
+		*/
 		return assertion;
 	}
 
@@ -220,8 +230,18 @@ public class Test {
 
 			signature
 					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
+			
 			signature
 					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
+			
+			
+			//PRUEBA
+			Namespace saml2_namespace = new Namespace("urn:oasis:names:tc:SAML:2.0:assertion", "saml2");
+			List<ContentReference> listReferences = signature.getContentReferences();
+			
+			
+			//FIN PRUEBA
+			/*signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_WITH_COMMENTS);*/
 
 			// https://svn.apache.org/repos/asf/santuario/xml-security-java/trunk/samples/org/apache/xml/security/samples/signature/CreateSignature.java
 			X509Certificate cert = (X509Certificate) new Test()
@@ -242,7 +262,8 @@ public class Test {
 			// ES MUY IMPORTANTE HACER ESTO POR ESTE ORDEN, SI NO LA FIRMA NO
 			// FUNCIONA.
 			assertion.setSignature(signature);
-
+			
+				
 			MarshallerFactory marshallerFactory = Configuration
 					.getMarshallerFactory();
 
