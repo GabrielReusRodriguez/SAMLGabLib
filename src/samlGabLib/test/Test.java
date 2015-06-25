@@ -26,7 +26,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.algorithms.SignatureAlgorithm;
-import org.apache.xml.security.signature.XMLSignature;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
@@ -59,13 +58,18 @@ import org.opensaml.xml.io.MarshallerFactory;
 import org.opensaml.xml.io.MarshallingException;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.schema.impl.XSStringBuilder;
+import org.opensaml.xml.security.SecurityConfiguration;
 import org.opensaml.xml.security.credential.Credential;
+import org.opensaml.xml.security.keyinfo.KeyInfoGenerator;
+import org.opensaml.xml.security.keyinfo.KeyInfoGeneratorFactory;
+import org.opensaml.xml.security.keyinfo.KeyInfoGeneratorManager;
+import org.opensaml.xml.security.keyinfo.NamedKeyInfoGeneratorManager;
 import org.opensaml.xml.security.x509.BasicX509Credential;
+import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.SignatureException;
 import org.opensaml.xml.signature.Signer;
-import org.opensaml.xml.signature.impl.SignatureImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -210,12 +214,6 @@ public class Test {
 
 			Assertion assertion = buildAssertion();
 
-			// Signature
-			/*
-			 * SignatureBuilder signb = new SignatureBuilder(); SignatureImpl
-			 * signature = signb.buildObject();
-			 */
-
 			Signature signature = (Signature) Configuration.getBuilderFactory()
 					.getBuilder(Signature.DEFAULT_ELEMENT_NAME)
 					.buildObject(Signature.DEFAULT_ELEMENT_NAME);
@@ -224,36 +222,7 @@ public class Test {
 					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
 			signature
 					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
-			
-			
-			
-/*
-			String xml = "<?xml version='1.0' encoding='UTF-8'?><Gabriel>yes</Gabriel>";
-			Document document = null;
-			try {
-				document = loadXMLFrom(xml);
-			} catch (SAXException e2) { // TODO Auto-generated catch block
-				e2.printStackTrace();
-			} catch (IOException e2) { // TODO Auto-generated catch block
-										// e2.printStackTrace();
-			}
 
-			String baseURI ="";
-			  XMLSignature xmlSignature =null; try { xmlSignature = new
-			  XMLSignature( document, baseURI,
-			  //"http://www.w3.org/2000/09/xmldsig#rsa-sha1"
-			  SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1 );
-			  //appendChild(xmlSignature.getElement());
-			  
-			  } catch (XMLSecurityException e1) { // TODO Auto-generated catch block 
-				  e1.printStackTrace(); }
-			  }
-			  
-			  signature.setXMLSignature(xmlSignature);
-*/
-			/*
-			 * Prueba
-			 */
 			// https://svn.apache.org/repos/asf/santuario/xml-security-java/trunk/samples/org/apache/xml/security/samples/signature/CreateSignature.java
 			X509Certificate cert = (X509Certificate) new Test()
 					.getCertificate("csi");
@@ -264,97 +233,29 @@ public class Test {
 			credential.setPrivateKey(prKey);
 			Credential signingCredential = credential;
 
-			/*
-			 * try { xmlSignature.addKeyInfo(cert); } catch
-			 * (XMLSecurityException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 */
+			// Set del KeyInfo
+			KeyInfo keyInfo = null;
+			keyInfo = getKeyInfo(signingCredential);
+			signature.setKeyInfo(keyInfo);
+
 			signature.setSigningCredential(signingCredential);
-			/*
-			 * Transforms transforms=new Transforms(document); try {
-			 * transforms.addTransform
-			 * (Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
-			 * transforms.addTransform
-			 * (Transforms.TRANSFORM_C14N_EXCL_OMIT_COMMENTS);
-			 * //xmlSignature.addDocument
-			 * ("",transforms,org.apache.xml.security.utils
-			 * .Constants.ALGO_ID_DIGEST_SHA1); xmlSignature.addDocument("",
-			 * transforms,
-			 * org.apache.xml.security.utils.Constants.ALGO_ID_DIGEST_SHA1); }
-			 * catch (TransformationException e1) { // TODO Auto-generated catch
-			 * block e1.printStackTrace(); } catch (XMLSignatureException e) {
-			 * // TODO Auto-generated catch block e.printStackTrace(); } try {
-			 * xmlSignature.sign(prKey); } catch (XMLSignatureException e1) { //
-			 * TODO Auto-generated catch block e1.printStackTrace(); }
-			 * 
-			 * try { xmlSignature.addKeyInfo(cert); } catch
-			 * (XMLSecurityException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 */
+			// ES MUY IMPORTANTE HACER ESTO POR ESTE ORDEN, SI NO LA FIRMA NO
+			// FUNCIONA.
+			assertion.setSignature(signature);
 
-			// gabriel
-			/*
-			 * try {
-			 * 
-			 * 
-			 * KeyInfo
-			 * keyInfo=(KeyInfo)buildXMLObject(KeyInfo.DEFAULT_ELEMENT_NAME);
-			 * X509Data
-			 * data=(X509Data)buildXMLObject(X509Data.DEFAULT_ELEMENT_NAME);
-			 * X509Certificate
-			 * cert=(X509Certificate)buildXMLObject(X509Certificate
-			 * .DEFAULT_ELEMENT_NAME); String
-			 * value=org.apache.xml.security.utils
-			 * .Base64.encode(cred.getEntityCertificate().getEncoded());
-			 * cert.setValue(value); data.getX509Certificates().add(cert);
-			 * keyInfo.getX509Datas().add(data); signature.setKeyInfo(keyInfo);
-			 * } catch ( CertificateEncodingException e) { throw new
-			 * SAML2SSOUIAuthenticatorException("errorGettingCert"); }
-			 */
-
-			// \gabriel
-			// KeyInfo keyInfo = null;
-			/*
-			 * SecurityConfiguration secConfiguration =
-			 * Configuration.getGlobalSecurityConfiguration();
-			 * NamedKeyInfoGeneratorManager namedKeyInfoGeneratorManager =
-			 * secConfiguration.getKeyInfoGeneratorManager();
-			 * KeyInfoGeneratorManager keyInfoGeneratorManager =
-			 * namedKeyInfoGeneratorManager.getDefaultManager();
-			 * KeyInfoGeneratorFactory keyInfoGeneratorFactory =
-			 * keyInfoGeneratorManager.getFactory(signingCredential);
-			 * KeyInfoGenerator keyInfoGenerator =
-			 * keyInfoGeneratorFactory.newInstance();
-			 * 
-			 * 
-			 * try { keyInfo = keyInfoGenerator.generate(signingCredential); }
-			 * catch (Exception e) { e.printStackTrace(); }
-			 * 
-			 * signature.setKeyInfo(keyInfo);
-			 */
-			/*
-			 * KeyInfoBuilder kib = new KeyInfoBuilder().buildObject(null);
-			 * KeyInfo keyInfo = new KeyInfo(KeyInfo.DEFAULT_ELEMENT_NAME);
-			 * 
-			 * signature.setKeyInfo(null); assertion.setSignature(signature);
-			 */
 			MarshallerFactory marshallerFactory = Configuration
 					.getMarshallerFactory();
+
 			Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
 			Element assertionElement = marshaller.marshall(assertion);
 
-			XMLSignature xmlSignature = ((SignatureImpl)signature).getXMLSignature();
 			try {
 				Signer.signObject(signature);
+
 			} catch (SignatureException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			/*
-			 * Fin prueba
-			 */
-
-			// marshall Assertion Java class into XML
 
 			printResult(assertionElement);
 
@@ -364,6 +265,31 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+	private static KeyInfo getKeyInfo(Credential signingCredential) {
+		
+		KeyInfo keyInfo = null;
+		
+		SecurityConfiguration secConfiguration = Configuration
+				.getGlobalSecurityConfiguration();
+		NamedKeyInfoGeneratorManager namedKeyInfoGeneratorManager = secConfiguration
+				.getKeyInfoGeneratorManager();
+		KeyInfoGeneratorManager keyInfoGeneratorManager = namedKeyInfoGeneratorManager
+				.getDefaultManager();
+		KeyInfoGeneratorFactory keyInfoGeneratorFactory = keyInfoGeneratorManager
+				.getFactory(signingCredential);
+		KeyInfoGenerator keyInfoGenerator = keyInfoGeneratorFactory
+				.newInstance();
+
+		try {
+			keyInfo = keyInfoGenerator.generate(signingCredential);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return keyInfo;
 	}
 
 	private static AttributeStatement newAttribute(String name, String value,
