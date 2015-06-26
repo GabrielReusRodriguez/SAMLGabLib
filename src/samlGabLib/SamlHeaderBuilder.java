@@ -46,19 +46,25 @@ import org.w3c.dom.Element;
 
 public class SamlHeaderBuilder {
 
-	
 	private SecurityDataManager securityDataManager = null;
-	
-	
-	public SamlHeaderBuilder() {
-		securityDataManager = new SecurityDataManager("csi");
+	private final static String SECURITY_ALIAS = "csi";
+
+	public SamlHeaderBuilder(String securityAlias)
+			throws ConfigurationException {
+		DefaultBootstrap.bootstrap();
+		securityDataManager = new SecurityDataManager(securityAlias);
 	}
-	
-	public String build(){
-		
-		
+
+	public SamlHeaderBuilder() throws ConfigurationException {
+		DefaultBootstrap.bootstrap();
+		securityDataManager = new SecurityDataManager(SECURITY_ALIAS);
+	}
+
+	public String build() {
+
+		String header = "";
 		try {
-			DefaultBootstrap.bootstrap();
+
 			SignatureAlgorithm.registerDefaultAlgorithms();
 
 			Assertion assertion = buildAssertion();
@@ -69,19 +75,19 @@ public class SamlHeaderBuilder {
 
 			signature
 					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
-			
+
 			signature
 					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
-			
+
 			signature.setKeyInfo(securityDataManager.getKeyInfo());
 
-			signature.setSigningCredential(securityDataManager.getCredentials());
-			
+			signature
+					.setSigningCredential(securityDataManager.getCredentials());
+
 			// ES MUY IMPORTANTE HACER ESTO POR ESTE ORDEN, SI NO LA FIRMA NO
 			// FUNCIONA.
 			assertion.setSignature(signature);
-			
-				
+
 			MarshallerFactory marshallerFactory = Configuration
 					.getMarshallerFactory();
 
@@ -96,19 +102,16 @@ public class SamlHeaderBuilder {
 				e1.printStackTrace();
 			}
 
-			printResult(assertionElement);
-
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
+			// printResult(assertionElement);
+			header = header2String(assertionElement);
 		} catch (MarshallingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return "";
+
+		return header;
 	}
-	
-	
+
 	private Assertion buildAssertion() {
 		AssertionBuilder ab = new AssertionBuilder();
 
@@ -136,22 +139,22 @@ public class SamlHeaderBuilder {
 
 		ConditionsBuilder cb = new ConditionsBuilder();
 		Conditions myConditions = cb.buildObject();
-		//Creo la date con la condicion.
+		// Creo la date con la condicion.
 		DateTime dtToday = null;
 		dtToday = new DateTime();
-		
+
 		DateTime dtNotAfter = null;
 		dtNotAfter = new DateTime();
 		dtNotAfter = dtToday.plusMinutes(10);
-		
-		//myConditions.setNotBefore("2015-03-16T12:32:26.024Z");
+
+		// myConditions.setNotBefore("2015-03-16T12:32:26.024Z");
 		myConditions.setNotBefore(dtToday);
 		myConditions.setNotOnOrAfter(dtNotAfter);
-		
+
 		assertion.setConditions(myConditions);
 		// myConditions.setNotOnOrAfter("2015-03-16T12:41:06.024Z");
-		//myConditions.setNotBefore(new DateTime());
-		//myConditions.setNotOnOrAfter(new DateTime());
+		// myConditions.setNotBefore(new DateTime());
+		// myConditions.setNotOnOrAfter(new DateTime());
 
 		AttributeStatementBuilder attstmtb = new AttributeStatementBuilder();
 		AttributeStatement attstmt = attstmtb.buildObject();
@@ -183,23 +186,22 @@ public class SamlHeaderBuilder {
 
 		// user authenticated via X509 token
 		/*
-		AuthnStatementBuilder asb = new AuthnStatementBuilder();
-		AuthnStatement myAuthnStatement = asb.buildObject();
-		myAuthnStatement.setAuthnInstant(new DateTime());
-		AuthnContextBuilder acb = new AuthnContextBuilder();
-		AuthnContext myACI = acb.buildObject();
-		AuthnContextClassRefBuilder accrb = new AuthnContextClassRefBuilder();
-		AuthnContextClassRef accr = accrb.buildObject();
-		accr.setAuthnContextClassRef(AuthnContext.X509_AUTHN_CTX);
-		myACI.setAuthnContextClassRef(accr);
-		myAuthnStatement.setAuthnContext(myACI);
-		assertion.getAuthnStatements().add(myAuthnStatement);
-		*/
+		 * AuthnStatementBuilder asb = new AuthnStatementBuilder();
+		 * AuthnStatement myAuthnStatement = asb.buildObject();
+		 * myAuthnStatement.setAuthnInstant(new DateTime()); AuthnContextBuilder
+		 * acb = new AuthnContextBuilder(); AuthnContext myACI =
+		 * acb.buildObject(); AuthnContextClassRefBuilder accrb = new
+		 * AuthnContextClassRefBuilder(); AuthnContextClassRef accr =
+		 * accrb.buildObject();
+		 * accr.setAuthnContextClassRef(AuthnContext.X509_AUTHN_CTX);
+		 * myACI.setAuthnContextClassRef(accr);
+		 * myAuthnStatement.setAuthnContext(myACI);
+		 * assertion.getAuthnStatements().add(myAuthnStatement);
+		 */
 		return assertion;
 	}
 
-	
-	private static void printResult(Element assertionElement) {
+	private void printResult(Element assertionElement) {
 		Transformer transformer;
 		try {
 
@@ -225,11 +227,37 @@ public class SamlHeaderBuilder {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
+	private String header2String(Element assertionElement) {
+		String header = "";
+		Transformer transformer;
+		try {
 
-	private static AttributeStatement newAttribute(String name, String value,
+			transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+					"yes");
+			StreamResult result = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(assertionElement.getParentNode());
+
+			transformer.transform(source, result);
+			header = result.getWriter().toString();
+			// System.out.println(xmlString);
+
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return header;
+	}
+
+	private AttributeStatement newAttribute(String name, String value,
 			AttributeStatement attstmt) {
 		AttributeBuilder attbldr = new AttributeBuilder();
 		Attribute attr = attbldr.buildObject();
@@ -244,7 +272,7 @@ public class SamlHeaderBuilder {
 		return attstmt;
 
 	}
-	
+
 	private static org.w3c.dom.Document loadXMLFrom(java.io.InputStream is)
 			throws org.xml.sax.SAXException, java.io.IOException {
 		javax.xml.parsers.DocumentBuilderFactory factory = javax.xml.parsers.DocumentBuilderFactory
@@ -259,10 +287,5 @@ public class SamlHeaderBuilder {
 		is.close();
 		return doc;
 	}
-	
-	
-	
 
-
-	
 }

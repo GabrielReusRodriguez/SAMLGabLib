@@ -22,7 +22,8 @@ import org.opensaml.xml.signature.KeyInfo;
 
 public class SecurityDataManager {
 
-	private final static String PKCS12_RESOURCE = "csiKeyStore.pkcs12";
+	//private final static String PKCS12_RESOURCE = "csiKeyStore.pkcs12";
+	private final static String PKCS12_RESOURCE = "samlGabLib/rsc/csiKeyStore.pkcs12";
 	private final static String PKCS12_ALIAS = "csi";
 	/**
 	 * <p>
@@ -41,23 +42,37 @@ public class SecurityDataManager {
 	protected SecurityDataManager(){
 		loadKeyStore();
 		loadPrivateKey(PKCS12_ALIAS);
-		loadKeyInfo();
-		loadCertificate(PKCS12_ALIAS);
+		loadCertificate(PKCS12_ALIAS);	
 		createCredentials();
+		loadKeyInfo();
 	}
 	
 	protected SecurityDataManager(String alias){
 		loadKeyStore();
 		loadPrivateKey(alias);
-		loadKeyInfo();
+		
 		loadCertificate(alias);
 		createCredentials();
+		loadKeyInfo();
 	}
 	
 	private void loadKeyStore() {
 		try {
 			this.keyStore = KeyStore.getInstance("PKCS12");
+			/*this.keyStore.load(this.getClass().getResourceAsStream(PKCS12_RESOURCE),
+					PKCS12_PASSWORD.toCharArray());*/
+			this.keyStore.load(this.getClass().getClassLoader().getResourceAsStream(PKCS12_RESOURCE),
+					PKCS12_PASSWORD.toCharArray());
 		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -68,19 +83,8 @@ public class SecurityDataManager {
 		
 		try {
 
-			this.keyStore.load(this.getClass().getResourceAsStream(PKCS12_RESOURCE),
-					PKCS12_PASSWORD.toCharArray());
 			this.certificate = this.keyStore.getCertificate(alias);
 
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

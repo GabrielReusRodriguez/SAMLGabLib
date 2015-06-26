@@ -71,6 +71,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import samlGabLib.SamlHeaderBuilder;
+
 public class Test {
 
 	// public final static String PKCS12_RESOURCE =
@@ -207,87 +209,104 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-
-		// https://narendrakadali.wordpress.com/2011/06/05/sign-assertion-using-opensaml/
-
-		// http://mylifewithjava.blogspot.com.es/2012/11/signing-with-opensaml.html
-
-		// https://narendrakadali.wordpress.com/2011/06/05/sign-assertion-using-opensaml/
-
-		// http://blog.keksrolle.de/2010/07/27/how-to-create-a-valid-saml-2-0-assertion-with-opensaml-for-java.html
-
-		// http://www.programcreek.com/java-api-examples/index.php?api=org.opensaml.SAMLException
-		// http://web-gmazza.rhcloud.com/blog/entry/opensaml-with-web-services
-		try {
-			DefaultBootstrap.bootstrap();
-			SignatureAlgorithm.registerDefaultAlgorithms();
-
-			Assertion assertion = buildAssertion();
-
-			Signature signature = (Signature) Configuration.getBuilderFactory()
-					.getBuilder(Signature.DEFAULT_ELEMENT_NAME)
-					.buildObject(Signature.DEFAULT_ELEMENT_NAME);
-
-			signature
-					.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
-			
-			signature
-					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
-			
-			
-			//PRUEBA
-			Namespace saml2_namespace = new Namespace("urn:oasis:names:tc:SAML:2.0:assertion", "saml2");
-			List<ContentReference> listReferences = signature.getContentReferences();
-			
-			
-			//FIN PRUEBA
-			/*signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_WITH_COMMENTS);*/
-
-			// https://svn.apache.org/repos/asf/santuario/xml-security-java/trunk/samples/org/apache/xml/security/samples/signature/CreateSignature.java
-			X509Certificate cert = (X509Certificate) new Test()
-					.getCertificate("csi");
-			PrivateKey prKey = new Test().getPrivateKey("csi");
-
-			BasicX509Credential credential = new BasicX509Credential();
-			credential.setEntityCertificate(cert);
-			credential.setPrivateKey(prKey);
-			Credential signingCredential = credential;
-
-			// Set del KeyInfo
-			KeyInfo keyInfo = null;
-			keyInfo = getKeyInfo(signingCredential);
-			signature.setKeyInfo(keyInfo);
-
-			signature.setSigningCredential(signingCredential);
-			// ES MUY IMPORTANTE HACER ESTO POR ESTE ORDEN, SI NO LA FIRMA NO
-			// FUNCIONA.
-			assertion.setSignature(signature);
-			
-				
-			MarshallerFactory marshallerFactory = Configuration
-					.getMarshallerFactory();
-
-			Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
-			Element assertionElement = marshaller.marshall(assertion);
-
-			try {
-				Signer.signObject(signature);
-
-			} catch (SignatureException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			printResult(assertionElement);
-
-		} catch (ConfigurationException e) {
+		build_v2();
+	}
+	
+	
+	private static void build_v2(){
+		SamlHeaderBuilder builder = null;
+		try{
+			builder = new SamlHeaderBuilder();
+		}catch(ConfigurationException e){
 			e.printStackTrace();
-		} catch (MarshallingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return;
 		}
+		String header = builder.build();
+		System.out.println(header);
+		
 	}
 
+	
+	private static void build_v1(){
+		// https://narendrakadali.wordpress.com/2011/06/05/sign-assertion-using-opensaml/
+
+				// http://mylifewithjava.blogspot.com.es/2012/11/signing-with-opensaml.html
+
+				// https://narendrakadali.wordpress.com/2011/06/05/sign-assertion-using-opensaml/
+
+				// http://blog.keksrolle.de/2010/07/27/how-to-create-a-valid-saml-2-0-assertion-with-opensaml-for-java.html
+
+				// http://www.programcreek.com/java-api-examples/index.php?api=org.opensaml.SAMLException
+				// http://web-gmazza.rhcloud.com/blog/entry/opensaml-with-web-services
+				try {
+					DefaultBootstrap.bootstrap();
+					SignatureAlgorithm.registerDefaultAlgorithms();
+
+					Assertion assertion = buildAssertion();
+
+					Signature signature = (Signature) Configuration.getBuilderFactory()
+							.getBuilder(Signature.DEFAULT_ELEMENT_NAME)
+							.buildObject(Signature.DEFAULT_ELEMENT_NAME);
+
+					signature
+							.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1);
+					
+					signature
+							.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
+					
+					
+					//PRUEBA
+					Namespace saml2_namespace = new Namespace("urn:oasis:names:tc:SAML:2.0:assertion", "saml2");
+					List<ContentReference> listReferences = signature.getContentReferences();
+					
+					
+					//FIN PRUEBA
+					/*signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_WITH_COMMENTS);*/
+
+					// https://svn.apache.org/repos/asf/santuario/xml-security-java/trunk/samples/org/apache/xml/security/samples/signature/CreateSignature.java
+					X509Certificate cert = (X509Certificate) new Test()
+							.getCertificate("csi");
+					PrivateKey prKey = new Test().getPrivateKey("csi");
+
+					BasicX509Credential credential = new BasicX509Credential();
+					credential.setEntityCertificate(cert);
+					credential.setPrivateKey(prKey);
+					Credential signingCredential = credential;
+
+					// Set del KeyInfo
+					KeyInfo keyInfo = null;
+					keyInfo = getKeyInfo(signingCredential);
+					signature.setKeyInfo(keyInfo);
+
+					signature.setSigningCredential(signingCredential);
+					// ES MUY IMPORTANTE HACER ESTO POR ESTE ORDEN, SI NO LA FIRMA NO
+					// FUNCIONA.
+					assertion.setSignature(signature);
+					
+						
+					MarshallerFactory marshallerFactory = Configuration
+							.getMarshallerFactory();
+
+					Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
+					Element assertionElement = marshaller.marshall(assertion);
+
+					try {
+						Signer.signObject(signature);
+
+					} catch (SignatureException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					printResult(assertionElement);
+
+				} catch (ConfigurationException e) {
+					e.printStackTrace();
+				} catch (MarshallingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	}
 
 	private static KeyInfo getKeyInfo(Credential signingCredential) {
 		
