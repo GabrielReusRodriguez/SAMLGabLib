@@ -1,6 +1,9 @@
 package samlGabLib;
 
+import java.io.IOException;
 import java.io.StringWriter;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -16,6 +19,7 @@ import org.joda.time.DateTime;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLVersion;
+import org.opensaml.common.impl.SecureRandomIdentifierGenerator;
 import org.opensaml.saml1.core.NameIdentifier;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
@@ -47,20 +51,47 @@ import org.w3c.dom.Element;
 public class SamlHeaderBuilder {
 
 	private SecurityDataManager securityDataManager = null;
-	private final static String SECURITY_ALIAS = "csi";
+	private SamlHeaderConfig config = null;
+	private Element samlHeaderElement = null;
 
-	public SamlHeaderBuilder(String securityAlias)
-			throws ConfigurationException {
+	private void init(String rutaProperties, boolean classpath)
+			throws ConfigurationException, IOException {
+		this.config = SamlHeaderConfigFactory.newInstance(rutaProperties,
+				classpath);
 		DefaultBootstrap.bootstrap();
-		securityDataManager = new SecurityDataManager(securityAlias);
 	}
 
-	public SamlHeaderBuilder() throws ConfigurationException {
+	private void init() throws ConfigurationException, IOException {
+		this.config = SamlHeaderConfigFactory.newInstance();
 		DefaultBootstrap.bootstrap();
-		securityDataManager = new SecurityDataManager(SECURITY_ALIAS);
 	}
 
-	public String build() {
+	public SamlHeaderBuilder() throws SamlHeaderBuilderException {
+		try {
+			init();
+			securityDataManager = new SecurityDataManager();
+		} catch (ConfigurationException e) {
+			throw new SamlHeaderBuilderException(e);
+		} catch (IOException e) {
+			throw new SamlHeaderBuilderException(e);
+		}
+	}
+
+	public SamlHeaderBuilder(String ruta_properties, boolean classpath)
+			throws SamlHeaderBuilderException {
+		try {
+			init(ruta_properties, classpath);
+			securityDataManager = new SecurityDataManager(this.config);
+		} catch (ConfigurationException e) {
+			throw new SamlHeaderBuilderException(e);
+		} catch (IOException e) {
+			throw new SamlHeaderBuilderException(e);
+		} catch (KeyStoreException e) {
+			throw new SamlHeaderBuilderException(e);
+		}
+	}
+
+	public String build() throws SamlHeaderBuilderException {
 
 		String header = "";
 		try {
@@ -100,31 +131,40 @@ public class SamlHeaderBuilder {
 			} catch (SignatureException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				throw new SamlHeaderBuilderException(e1);
 			}
 
 			// printResult(assertionElement);
+			this.samlHeaderElement = assertionElement;
 			header = header2String(assertionElement);
 		} catch (MarshallingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new SamlHeaderBuilderException(e);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new SamlHeaderBuilderException(e);
 		}
 
 		return header;
 	}
 
-	private Assertion buildAssertion() {
+	private Assertion buildAssertion() throws NoSuchAlgorithmException {
 		AssertionBuilder ab = new AssertionBuilder();
+		SecureRandomIdentifierGenerator idGenerator = new SecureRandomIdentifierGenerator();
 
 		// Assertion.
 		Assertion assertion = ab.buildObject();
 		assertion.setVersion(SAMLVersion.VERSION_20);
-		assertion.setID("_cb7f518664f2199119a3d09c9927de60");
+		// assertion.setID("_cb7f518664f2199119a3d09c9927de60");
+		assertion.setID(idGenerator.generateIdentifier());
 		assertion.setIssueInstant(new DateTime());
 
 		// Issuer
 		IssuerBuilder ib = new IssuerBuilder();
 		Issuer myIssuer = ib.buildObject();
-		myIssuer.setValue("HC -");
+		myIssuer.setValue(this.config.VALOR_EMISOR_SAML);
 		assertion.setIssuer(myIssuer);
 
 		// Subject
@@ -132,7 +172,9 @@ public class SamlHeaderBuilder {
 		Subject mySubject = sb.buildObject();
 		NameIDBuilder nb = new NameIDBuilder();
 		NameID myNameID = nb.buildObject();
-		myNameID.setValue("CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03, OU=Serveis Públics de Certificació CDA-1, O=Consorci Sanitari Integral, C=ES");
+		// myNameID.setValue("CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03, OU=Serveis Públics de Certificació CDA-1, O=Consorci Sanitari Integral, C=ES");
+		myNameID.setValue(securityDataManager.getDNFromCertificate());
+
 		myNameID.setFormat(NameIdentifier.X509_SUBJECT);
 		mySubject.setNameID(myNameID);
 		assertion.setSubject(mySubject);
@@ -145,7 +187,8 @@ public class SamlHeaderBuilder {
 
 		DateTime dtNotAfter = null;
 		dtNotAfter = new DateTime();
-		dtNotAfter = dtToday.plusMinutes(10);
+		// dtNotAfter = dtToday.plusMinutes(10);
+		dtNotAfter = dtToday.plusSeconds(config.VALOR_VALIDEZ_SAML);
 
 		// myConditions.setNotBefore("2015-03-16T12:32:26.024Z");
 		myConditions.setNotBefore(dtToday);
@@ -286,6 +329,10 @@ public class SamlHeaderBuilder {
 		org.w3c.dom.Document doc = builder.parse(is);
 		is.close();
 		return doc;
+	}
+	
+	public Element getSamlHeader(){
+		return this.samlHeaderElement;
 	}
 
 }

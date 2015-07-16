@@ -1,6 +1,8 @@
 package samlGabLib;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -30,39 +32,57 @@ public class SecurityDataManager {
 	 * Constraseña de acceso a la clave privada del usuario
 	 * </p>
 	 */
-	// public final static String PKCS12_PASSWORD = "facturae";
+	//public final static String PKCS12_PASSWORD = "facturae";
 	private final static String PKCS12_PASSWORD = "5n9eDmVM";// hc3
 
+	
+	private SamlHeaderConfig config = null;
 	private Credential signingCredential = null;
 	private KeyInfo keyInfo = null;
 	private KeyStore keyStore = null;
 	private Certificate certificate = null;
+	//private X509Certificate x509Cert = null;
 	private PrivateKey privateKey = null;
 		
 	protected SecurityDataManager(){
 		loadKeyStore();
-		loadPrivateKey(PKCS12_ALIAS);
+		loadPrivateKey(PKCS12_ALIAS,PKCS12_PASSWORD);
 		loadCertificate(PKCS12_ALIAS);	
 		createCredentials();
 		loadKeyInfo();
 	}
 	
-	protected SecurityDataManager(String alias){
-		loadKeyStore();
-		loadPrivateKey(alias);
+	protected SecurityDataManager(SamlHeaderConfig config) throws KeyStoreException{
 		
-		loadCertificate(alias);
+		this.config = config;
+		loadKeyStore();
+		loadPrivateKey(this.config.VALOR_SECURITY_ALIAS,this.config.VALOR_PASS_MAGATZEM);
+		loadCertificate(this.config.VALOR_SECURITY_ALIAS);
 		createCredentials();
 		loadKeyInfo();
 	}
 	
+
 	private void loadKeyStore() {
+		
+		String pkcs12_resource =PKCS12_RESOURCE;
+		String pkcs12_pass = PKCS12_PASSWORD;
+		
 		try {
 			this.keyStore = KeyStore.getInstance("PKCS12");
-			/*this.keyStore.load(this.getClass().getResourceAsStream(PKCS12_RESOURCE),
-					PKCS12_PASSWORD.toCharArray());*/
-			this.keyStore.load(this.getClass().getClassLoader().getResourceAsStream(PKCS12_RESOURCE),
-					PKCS12_PASSWORD.toCharArray());
+			InputStream is = null;
+			
+			if (config != null && !config.VALOR_GET_FROM_CLASSPATH){
+				pkcs12_resource = config.VALOR_RUTA_MAGATZEM;
+				pkcs12_pass = config.VALOR_PASS_MAGATZEM;
+				is =  new FileInputStream(pkcs12_resource);
+			}else{
+				is = this.getClass().getClassLoader().getResourceAsStream(pkcs12_resource);
+			}
+			
+			this.keyStore.load(is,
+					pkcs12_pass.toCharArray());
+						
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,12 +112,13 @@ public class SecurityDataManager {
 
 	}
 	
-	private void loadPrivateKey(String alias){
+	private void loadPrivateKey(String alias,String password){
 
+		
 		if (this.keyStore != null) {
 			try {
 				this.privateKey = (PrivateKey) this.keyStore.getKey(alias,
-						PKCS12_PASSWORD.toCharArray());
+						password.toCharArray());
 			} catch (UnrecoverableKeyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -142,6 +163,11 @@ public class SecurityDataManager {
 		credential.setPrivateKey(prKey);
 		this.signingCredential= credential;
 		
+	}
+	
+	protected String getDNFromCertificate(){
+		X509Certificate cert = (X509Certificate) getCertificate();
+		return cert.getIssuerDN().getName();
 	}
 	
 	protected PrivateKey getPrivateKey() {
