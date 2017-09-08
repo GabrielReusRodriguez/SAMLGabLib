@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -53,11 +55,11 @@ public class SamlHeaderBuilder {
 	private SecurityDataManager securityDataManager = null;
 	private SamlHeaderConfig config = null;
 	private Element samlHeaderElement = null;
+	private SamlHeaderCustomData customData = null;
 
-	private void init(String rutaProperties, boolean classpath)
+	private void init(String rutaProperties,boolean classpath)
 			throws ConfigurationException, IOException {
-		this.config = SamlHeaderConfigFactory.newInstance(rutaProperties,
-				classpath);
+		this.config = SamlHeaderConfigFactory.newInstance(rutaProperties,classpath);
 		DefaultBootstrap.bootstrap();
 	}
 
@@ -77,10 +79,10 @@ public class SamlHeaderBuilder {
 		}
 	}
 
-	public SamlHeaderBuilder(String ruta_properties, boolean classpath)
+	public SamlHeaderBuilder(String ruta_properties,boolean classpath)
 			throws SamlHeaderBuilderException {
 		try {
-			init(ruta_properties, classpath);
+			init(ruta_properties,classpath);
 			securityDataManager = new SecurityDataManager(this.config);
 		} catch (ConfigurationException e) {
 			throw new SamlHeaderBuilderException(e);
@@ -91,9 +93,10 @@ public class SamlHeaderBuilder {
 		}
 	}
 
-	public String build() throws SamlHeaderBuilderException {
+	public String build(SamlHeaderCustomData customData) throws SamlHeaderBuilderException {
 
 		String header = "";
+		this.customData = customData;
 		try {
 
 			SignatureAlgorithm.registerDefaultAlgorithms();
@@ -202,6 +205,21 @@ public class SamlHeaderBuilder {
 		AttributeStatementBuilder attstmtb = new AttributeStatementBuilder();
 		AttributeStatement attstmt = attstmtb.buildObject();
 
+		
+		//Campos personalizados.
+		if(this.customData != null){
+			List<DataPair> listaAserciones = this.customData.getList();
+			DataPair valor = null;
+			if(listaAserciones != null){
+				Iterator<DataPair> it = listaAserciones.iterator();
+				while(it.hasNext()){
+					valor = (DataPair)it.next();
+					assertion.getAttributeStatements().add(
+							newAttribute(valor.getField(), valor.getValue(), attstmt));
+				}
+			}
+		}
+		/*
 		assertion.getAttributeStatements().add(
 				newAttribute("ResponsibleUser", "HCC0126WS", attstmt));
 		assertion.getAttributeStatements().add(
@@ -226,7 +244,7 @@ public class SamlHeaderBuilder {
 				newAttribute("Entity", "0126", attstmt));
 		assertion.getAttributeStatements().add(
 				newAttribute("CodeUP", "05994", attstmt));
-
+*/
 		// user authenticated via X509 token
 		/*
 		 * AuthnStatementBuilder asb = new AuthnStatementBuilder();

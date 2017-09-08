@@ -31,7 +31,7 @@ public class Test {
 		}
 		String header;
 		try {
-			header = builder.build();
+			header = builder.build(null);
 			System.out.println(header);
 		} catch (SamlHeaderBuilderException e) {
 			// TODO Auto-generated catch block
