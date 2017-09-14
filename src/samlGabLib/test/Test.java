@@ -1,10 +1,5 @@
 package samlGabLib.test;
 
-import java.io.IOException;
-import java.security.KeyStoreException;
-
-import org.opensaml.xml.ConfigurationException;
-
 import samlGabLib.SamlHeaderBuilder;
 import samlGabLib.SamlHeaderBuilderException;
 
@@ -31,7 +26,7 @@ public class Test {
 		}
 		String header;
 		try {
-			header = builder.build(null);
+			header = builder.build2String(null);
 			System.out.println(header);
 		} catch (SamlHeaderBuilderException e) {
 			// TODO Auto-generated catch block

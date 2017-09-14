@@ -93,10 +93,9 @@ public class SamlHeaderBuilder {
 		}
 	}
 
-	public String build(SamlHeaderCustomData customData) throws SamlHeaderBuilderException {
-
-		String header = "";
+	public Element build2Element(SamlHeaderCustomData customData) throws SamlHeaderBuilderException{
 		this.customData = customData;
+		Element assertionElement = null;
 		try {
 
 			SignatureAlgorithm.registerDefaultAlgorithms();
@@ -126,7 +125,7 @@ public class SamlHeaderBuilder {
 					.getMarshallerFactory();
 
 			Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
-			Element assertionElement = marshaller.marshall(assertion);
+			assertionElement = marshaller.marshall(assertion);
 
 			try {
 				Signer.signObject(signature);
@@ -139,7 +138,7 @@ public class SamlHeaderBuilder {
 
 			// printResult(assertionElement);
 			this.samlHeaderElement = assertionElement;
-			header = header2String(assertionElement);
+			//header = header2String(assertionElement);
 		} catch (MarshallingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,7 +148,21 @@ public class SamlHeaderBuilder {
 			e.printStackTrace();
 			throw new SamlHeaderBuilderException(e);
 		}
+		
+		return assertionElement;
 
+	}
+	
+	
+	public String build2String(SamlHeaderCustomData customData) throws SamlHeaderBuilderException {
+
+		String header = null;
+		Element assertionElement = null;
+		
+		assertionElement = build2Element(customData);
+		if (assertionElement != null) {
+			header = header2String(assertionElement);
+		}
 		return header;
 	}
 
@@ -175,7 +188,7 @@ public class SamlHeaderBuilder {
 		Subject mySubject = sb.buildObject();
 		NameIDBuilder nb = new NameIDBuilder();
 		NameID myNameID = nb.buildObject();
-		// myNameID.setValue("CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03, OU=Serveis Públics de Certificació CDA-1, O=Consorci Sanitari Integral, C=ES");
+		// myNameID.setValue("CN=SAP, OU=Vegeu https://www.catcert.cat/verCDA-1 (c)03, OU=Serveis Pï¿½blics de Certificaciï¿½ CDA-1, O=Consorci Sanitari Integral, C=ES");
 		myNameID.setValue(securityDataManager.getDNFromCertificate());
 
 		myNameID.setFormat(NameIdentifier.X509_SUBJECT);
